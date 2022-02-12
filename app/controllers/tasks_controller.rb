@@ -5,8 +5,12 @@ class TasksController < ApplicationController
   end
 
   def create
-    Task.create(task_params)
-    render json: {message: "新規作成しました"}
+    task = Task.new(task_params)
+    if task.save
+      render json: {id: task.id, title: task.title, tag: task.tag, tag_name: task.tag_name, created_at: task.created_at, update_at: task.updated_at}
+    else 
+      render json: {message: "保存できませんでした", errors: task.errors.messages}
+    end
   end
 
   def destroy
